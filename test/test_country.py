@@ -20,5 +20,6 @@ class CountryTest(GDOTestCase):
         loader.init_cli()
 
     async def test_country(self):
-        out = GDO_Country.table().get_by_aid('1').render_html()
+        out = GDO_Country.table().get_by_aid('DE').render_html()
         self.assertIn('.png', out, 'render does not work.')
+        self.assertIn('Germany', out, 'render#2 does not work.')

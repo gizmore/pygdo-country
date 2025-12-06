@@ -11,7 +11,7 @@ class module_country(GDO_Module):
 
     async def gdo_install(self):
         bulk = []
-        headers = GDO_Country.table().columns_only('country_name', 'country_iso2')
+        headers = GDO_Country.table().columns_only('country_name', 'country_id')
         with open(self.file_path('data/all.csv'), newline='', encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
