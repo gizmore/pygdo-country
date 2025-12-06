@@ -4,6 +4,10 @@ import csv
 
 class module_country(GDO_Module):
 
+    def __init__(self):
+        super().__init__()
+        self._priority = 40
+
     def gdo_classes(self):
         return [
             GDO_Country,
