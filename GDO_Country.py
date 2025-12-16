@@ -31,3 +31,12 @@ class GDO_Country(GDO):
     def render_html(self):
         from gdo.country.module_country import module_country
         return f'<img src="{module_country.instance().www_path(f"img/{self.get_iso2()}.png")} title="{self.render_name()}">" alt="{self.render_name()}" />'
+
+    def render_list(self):
+        return self.render_utf8_flag() + "&nbsp;" + self.render_name()
+
+    def render_utf8_flag(self) -> str:
+        if code := self.get_iso2():
+            base = 0x1F1E6
+            return ''.join(chr(base + ord(c.upper()) - ord('A')) for c in code)
+        return '🏳️'

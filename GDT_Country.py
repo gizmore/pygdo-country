@@ -1,3 +1,4 @@
+from gdo.base.Trans import t
 from gdo.core.GDT_Char import GDT_Char
 from gdo.core.GDT_ObjectSelect import GDT_ObjectSelect
 from gdo.country.GDO_Country import GDO_Country
@@ -15,3 +16,11 @@ class GDT_Country(GDT_Char, GDT_ObjectSelect):
     def gdo_column_define(self) -> str:
         return GDT_Char.gdo_column_define(self)
 
+    ##########
+    # Render #
+    ##########
+
+    def render_name(self) -> str:
+        if v := self.get_value():
+            return v.render_name()
+        return t('none')
