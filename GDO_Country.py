@@ -15,7 +15,7 @@ class GDO_Country(GDO):
 
     def gdo_columns(self) -> list[GDT]:
         return [
-            GDT_Char('country_id').maxlen(2).ascii().case_s().not_null().primary(),
+            GDT_Char('country_id').maxlen(2).ascii().case_s().primary(),
             GDT_String('country_name').not_null(),
             GDT_UInt('country_population'),
             GDT_UInt('country_phone_code'),
