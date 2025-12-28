@@ -1,4 +1,5 @@
 module_country = "Country"
+country = "Country"
 
 c_AF = "Afghanistan"
 c_AX = "Åland Islands"

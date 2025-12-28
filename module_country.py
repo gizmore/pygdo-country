@@ -6,6 +6,12 @@ import csv
 
 from gdo.country.GDT_Country import GDT_Country
 
+from typing import TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from gdo.ui.GDT_Page import GDT_Page
+
 
 class module_country(GDO_Module):
 
@@ -28,6 +34,9 @@ class module_country(GDO_Module):
                     bulk_data = [row['name'], row['alpha-2']]
                     bulk.append(bulk_data)
             GDO_Country.table().bulk_insert(headers, bulk)
+
+    def gdo_load_scripts(self, page: 'GDT_Page'):
+        self.add_css('css/pygdo-country.css')
 
     def gdo_module_config(self) -> list[GDT]:
         return [

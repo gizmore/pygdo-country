@@ -10,6 +10,9 @@ from gdo.core.GDT_UInt import GDT_UInt
 
 class GDO_Country(GDO):
 
+    def name_column(self) -> GDT:
+        return self.table().column('country_id')
+
     def gdo_persistent(self) -> bool:
         return True
 
@@ -30,10 +33,10 @@ class GDO_Country(GDO):
     @lru_cache(maxsize=None)
     def render_html(self):
         from gdo.country.module_country import module_country
-        return f'<img src="{module_country.instance().www_path(f"img/{self.get_iso2()}.png")} title="{self.render_name()}">" alt="{self.render_name()}" />'
+        return f'<span class="gdo-country"><img src="{module_country.instance().www_path(f"img/{self.get_iso2()}.png")}" title="{self.render_name()}" alt="{self.render_name()}" /></span>'
 
     def render_list(self):
-        return self.render_utf8_flag() + "&nbsp;" + self.render_name()
+        return self.render_name() + "&nbsp;" + self.render_utf8_flag()
 
     def render_utf8_flag(self) -> str:
         if code := self.get_iso2():
