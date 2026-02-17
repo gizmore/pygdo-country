@@ -3,6 +3,7 @@ from gdo.base.GDT import GDT
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.country.GDO_Country import GDO_Country
 import csv
+from gdo.base.GDO import GDO
 
 from gdo.country.GDT_Country import GDT_Country
 
@@ -19,7 +20,7 @@ class module_country(GDO_Module):
         super().__init__()
         self._priority = 40
 
-    def gdo_classes(self):
+    def gdo_classes(self) -> list[type[GDO]]:
         return [
             GDO_Country,
         ]
