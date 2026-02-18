@@ -1,6 +1,9 @@
 module_country = "Country"
 country = "Country"
 
+country_ethnics = "Origin Country"
+country_living = "Living In Country"
+
 c_AF = "Afghanistan"
 c_AX = "Åland Islands"
 c_AL = "Albania"
