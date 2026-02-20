@@ -33,7 +33,7 @@ class GDO_Country(GDO):
     @lru_cache(maxsize=None)
     def render_html(self):
         from gdo.country.module_country import module_country
-        return f'<span class="gdo-country"><img src="{module_country.instance().www_path(f"img/{self.get_iso2()}.png")}" title="{self.render_name()}" alt="{self.render_name()}" /></span>'
+        return f'<span class="gdo-country"><img src="{module_country.instance().www_path(f"img/{self.get_iso2()}.png")}" title="{self.render_name()}" alt="{self.render_name()}"></span>'
 
     def render_list(self):
         return self.render_name() + "&nbsp;" + self.render_utf8_flag()
