@@ -2,6 +2,7 @@ from gdo.base.GDO import GDO
 from gdo.base.Trans import t
 from gdo.core.GDT_Char import GDT_Char
 from gdo.core.GDT_ObjectSelect import GDT_ObjectSelect
+from gdo.core.GDT_Template import GDT_Template
 from gdo.country.GDO_Country import GDO_Country
 
 
@@ -42,3 +43,7 @@ class GDT_Country(GDT_Char, GDT_ObjectSelect):
 
     def render_cell(self) -> str:
         return self.render_html()
+
+    def render_table_filter(self, vals: dict):
+        # return super().render_form()
+        return GDT_Template().template('table', 'filter_string.html', vals).render()
