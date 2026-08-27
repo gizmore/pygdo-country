@@ -20,9 +20,23 @@ class GDT_Country(GDT_Char, GDT_ObjectSelect):
         return GDT_Char.gdo_column_define(self)
 
     def query_gdos(self, val: str) -> list[GDO]:
-        if len(val) == 2:
-            if gdo := self._table.get_by_aid(val):
+        val = str(val or '').strip()
+        if not val:
+            return []
+        # A country ISO code is an identity, never a fuzzy search term.  The
+        # input resolver lower-cases values before it gets here, while country
+        # IDs are stored upper-case, so canonicalise before the exact lookup.
+        if len(val) == 2 and val.isalpha():
+            if gdo := self._table.get_by_id(val.upper()):
                 return [gdo]
+        # Prefer an exact name in the active UI language before asking the
+        # database for partial (English source-name) matches. This prevents a
+        # localized name such as "Dänemark" from being interpreted as a broad
+        # text query and resolved to an unrelated first candidate.
+        needle = val.casefold()
+        for country in self._table.all_cached():
+            if country.render_name().casefold() == needle:
+                return [country]
         if gdt := self._table.column('country_name'):
             return self._table.select().where(f"{gdt.get_name()} LIKE '%{GDO.escape(val)}%'").exec().fetch_all()
         return GDO.EMPTY_LIST

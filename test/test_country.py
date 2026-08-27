@@ -32,3 +32,7 @@ class CountryTest(GDOTestCase):
     async def test_03_card_renders_the_country_name(self):
         field = GDT_Country('country').val('DE')
         self.assertIn(field.render_name(), field.render_card())
+
+    async def test_04_country_resolution_prefers_exact_iso(self):
+        field = GDT_Country('country')
+        self.assertEqual('DE', field.get_by_name('de').get_id())
