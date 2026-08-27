@@ -14,6 +14,7 @@ class GDT_Country(GDT_Char, GDT_ObjectSelect):
         self.maxlen(2)
         self.ascii()
         self.case_s()
+        self.icon('country')
 
     def gdo_column_define(self) -> str:
         return GDT_Char.gdo_column_define(self)
@@ -43,6 +44,9 @@ class GDT_Country(GDT_Char, GDT_ObjectSelect):
 
     def render_cell(self) -> str:
         return self.render_html()
+
+    def render_card(self) -> str:
+        return f'<p>{self.render_card_label()}: {self.render_html()} {self.render_name()}</p>'
 
     def render_table_filter(self, vals: dict):
         # return super().render_form()
