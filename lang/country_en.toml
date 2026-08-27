@@ -3,6 +3,7 @@ country = "Country"
 
 country_ethnics = "Origin Country"
 country_living = "Living In Country"
+country_signup_detection = "Detect country upon registration?"
 
 c_AF = "Afghanistan"
 c_AX = "Åland Islands"
