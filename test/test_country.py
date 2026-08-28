@@ -5,6 +5,7 @@ from gdo.base.Render import Mode
 from gdo.base.ModuleLoader import ModuleLoader
 from gdo.country.GDO_Country import GDO_Country
 from gdo.country.GDT_Country import GDT_Country
+from gdo.country.module_country import module_country
 from gdotest.TestUtil import GDOTestCase, reinstall_module, WebPlug
 
 
@@ -23,8 +24,14 @@ class CountryTest(GDOTestCase):
 
     async def test_country(self):
         out = GDO_Country.table().get_by_aid('DE').render_html()
-        self.assertIn('.png', out, 'render does not work.')
+        self.assertIn('background-position:-96px -80px', out, 'render does not use ISO sprite coordinates.')
         self.assertIn('Germany', out, 'render#2 does not work.')
+
+    async def test_01_generates_the_full_country_sprite(self):
+        from PIL import Image
+        sprite = module_country.instance().file_path('img/flags.png')
+        with Image.open(sprite) as image:
+            self.assertEqual((26 * 32, 26 * 20), image.size)
 
     async def test_02_has_portable_icon(self):
         self.assertEqual('⚑', GDT_Country('country').render_icon(Mode.render_cli))

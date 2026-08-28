@@ -3,6 +3,9 @@ from gdo.base.GDT import GDT
 from gdo.core.GDT_Bool import GDT_Bool
 from gdo.country.GDO_Country import GDO_Country
 import csv
+from pathlib import Path
+
+from PIL import Image
 from gdo.base.GDO import GDO
 
 from gdo.country.GDT_Country import GDT_Country
@@ -15,6 +18,10 @@ if TYPE_CHECKING:
 
 
 class module_country(GDO_Module):
+
+    FLAG_WIDTH = 32
+    FLAG_HEIGHT = 20
+    FLAG_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     def __init__(self):
         super().__init__()
@@ -35,6 +42,45 @@ class module_country(GDO_Module):
                     bulk_data = [row['name'], row['alpha-2']]
                     bulk.append(bulk_data)
             GDO_Country.table().bulk_insert(headers, bulk)
+        self.generate_flag_sprite()
+
+    def generate_flag_sprite(self) -> None:
+        """Build a fixed A-Z × A-Z ISO-3166 flag sprite for CSS rendering."""
+        letters = self.FLAG_LETTERS
+        width = self.FLAG_WIDTH
+        height = self.FLAG_HEIGHT
+        image_dir = Path(self.file_path('img'))
+        with Image.open(image_dir / 'ZZ.png') as source:
+            fallback = source.convert('RGBA')
+        sprite = Image.new('RGBA', (len(letters) * width, len(letters) * height))
+        for y, second in enumerate(letters):
+            for x, first in enumerate(letters):
+                flag_path = image_dir / f'{first}{second}.png'
+                try:
+                    if flag_path.is_file():
+                        with Image.open(flag_path) as source:
+                            flag = source.convert('RGBA')
+                    else:
+                        flag = fallback.copy()
+                except OSError:
+                    flag = fallback.copy()
+                flag.thumbnail((width, height), Image.Resampling.LANCZOS)
+                left = x * width + (width - flag.width) // 2
+                top = y * height + (height - flag.height) // 2
+                sprite.alpha_composite(flag, (left, top))
+        sprite.save(image_dir / 'flags.png', 'PNG')
+
+    @classmethod
+    def flag_position(cls, iso2: str) -> str:
+        """Return the sprite position for an ISO alpha-2 country code."""
+        code = str(iso2 or 'ZZ').upper()
+        if len(code) != 2 or any(letter not in cls.FLAG_LETTERS for letter in code):
+            code = 'ZZ'
+        return f'{-cls.FLAG_LETTERS.index(code[0]) * cls.FLAG_WIDTH}px {-cls.FLAG_LETTERS.index(code[1]) * cls.FLAG_HEIGHT}px'
+
+    def render_flag(self, iso2: str, title: str) -> str:
+        position = self.flag_position(iso2)
+        return f'<span class="gdo-country" style="background-position:{position}" title="{title}"></span>'
 
     def gdo_load_scripts(self, page: 'GDT_Page'):
         self.add_css('css/pygdo-country.css')

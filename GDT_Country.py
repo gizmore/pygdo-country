@@ -54,7 +54,7 @@ class GDT_Country(GDT_Char, GDT_ObjectSelect):
         if v := self.get_value():
             return v.render_html()
         from gdo.country.module_country import module_country
-        return f'<span class="gdo-country"><img src="{module_country.instance().www_path(f"img/ZZ.png")}" title="{t('no_country')}" alt="{t('no_country')}"></span>'
+        return module_country.instance().render_flag('ZZ', t('no_country'))
 
     def render_cell(self) -> str:
         return self.render_html()

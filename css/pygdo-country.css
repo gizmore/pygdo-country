@@ -1,4 +1,8 @@
-.gdo-country img {
+.gdo-country {
+    display: inline-block;
     width: 32px;
     height: 20px;
+    background-image: url('../img/flags.png');
+    background-repeat: no-repeat;
+    vertical-align: central;
 }
